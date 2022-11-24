@@ -1,0 +1,131 @@
+batch_size: 32
+data_dir: Datasets/market/market.csv
+dropout: 0.5
+epochs: 200
+features:
+- Adj Close
+- Open
+- High
+- Low
+- Volume
+frequency: 5
+learning_rate: 0.0001
+loss_function: !!python/object:torch.nn.modules.loss.MSELoss
+  _backward_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  _buffers: !!python/object/apply:collections.OrderedDict
+  - []
+  _forward_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  _forward_pre_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  _is_full_backward_hook: null
+  _load_state_dict_post_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  _load_state_dict_pre_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  _modules: !!python/object/apply:collections.OrderedDict
+  - []
+  _non_persistent_buffers_set: !!set {}
+  _parameters: !!python/object/apply:collections.OrderedDict
+  - []
+  _state_dict_hooks: !!python/object/apply:collections.OrderedDict
+  - []
+  reduction: mean
+  training: false
+monitor: val_loss
+n_features: 5
+n_hidden: 128
+n_layers: 2
+num_workers: 0
+optimizer: !!python/name:torch.optim.adam.Adam ''
+patience: 20
+scaler: !!python/object:sklearn.preprocessing._data.StandardScaler
+  _sklearn_version: 1.1.3
+  copy: true
+  mean_: !!python/object/apply:numpy.core.multiarray._reconstruct
+    args:
+    - &id001 !!python/name:numpy.ndarray ''
+    - !!python/tuple
+      - 0
+    - !!binary |
+      Yg==
+    state: !!python/tuple
+    - 1
+    - !!python/tuple
+      - 5
+    - &id002 !!python/object/apply:numpy.dtype
+      args:
+      - f8
+      - false
+      - true
+      state: !!python/tuple
+      - 3
+      - <
+      - null
+      - null
+      - null
+      - -1
+      - -1
+      - 0
+    - false
+    - !!binary |
+      kZi3GA3PM0CJeTvjsyo2QBA++KRVXDZAniEx+Jb1NUDuDInGgJmzQQ==
+  n_features_in_: 5
+  n_samples_seen_: !!python/object/apply:numpy.core.multiarray.scalar
+  - !!python/object/apply:numpy.dtype
+    args:
+    - i8
+    - false
+    - true
+    state: !!python/tuple
+    - 3
+    - <
+    - null
+    - null
+    - null
+    - -1
+    - -1
+    - 0
+  - !!binary |
+    MAYAAAAAAAA=
+  scale_: !!python/object/apply:numpy.core.multiarray._reconstruct
+    args:
+    - *id001
+    - !!python/tuple
+      - 0
+    - !!binary |
+      Yg==
+    state: !!python/tuple
+    - 1
+    - !!python/tuple
+      - 5
+    - *id002
+    - false
+    - !!binary |
+      CA/GSC0FGUBj+bZYraQZQDFWoWoIzhlA5M6CWsl8GUDXZEU5quCpQQ==
+  var_: !!python/object/apply:numpy.core.multiarray._reconstruct
+    args:
+    - *id001
+    - !!python/tuple
+      - 0
+    - !!binary |
+      Yg==
+    state: !!python/tuple
+    - 1
+    - !!python/tuple
+      - 5
+    - *id002
+    - false
+    - !!binary |
+      tEocmBeQQ0BYQRZPnoxEQJcq+7Ibz0RAE9PcOuFMRED7uSdMM+1kQw==
+  with_mean: true
+  with_std: true
+scheduler: !!python/name:torch.optim.lr_scheduler.StepLR ''
+sequence_length: 15
+target:
+- Returns
+test_size: 0.3
+ticker: AAPL
+val_size: 0.8
+version: AAPL
