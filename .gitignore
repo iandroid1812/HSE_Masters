@@ -5,3 +5,4 @@ Datasets/kaggle/Company.csv
 Datasets/results/clean_tweets.pkl
 Datasets/results/preprocessed.pkl
 Datasets/results/similarities.pkl
+darts_logs

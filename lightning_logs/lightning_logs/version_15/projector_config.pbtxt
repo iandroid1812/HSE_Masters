@@ -1,0 +1,5 @@
+embeddings {
+  tensor_name: "Ticker:00754"
+  metadata_path: "00754/Ticker\\metadata.tsv"
+  tensor_path: "00754/Ticker\\tensors.tsv"
+}
