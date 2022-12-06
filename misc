@@ -1,0 +1,80 @@
+# series_multi = TimeSeries.from_group_dataframe(
+#     data,
+#     time_col="Date",
+#     group_cols="Ticker",  # individual time series are extracted by grouping `df` by `group_cols`
+#     static_cols=[],
+#     value_cols=[
+#         "Adj Close",
+#         "Close",
+#         "High",
+#         "Low",
+#         "Open",
+#         # "Volume"
+#     ],  # optionally, specify the time varying columns which are extracted
+# )
+
+# print(f"\n{len(series_multi)} series were extracted from the input DataFrame")
+# for i, ts in enumerate(series_multi):
+#     print(f"Static covariates of series {i}")
+#     print(ts.static_covariates)
+#     ts["Close"].plot(label=f"Close_series_{i}")
+
+
+
+
+# train_series = {
+#     "target": [],
+#     "covariances": []
+# }
+
+# val_series = {
+#     "target": [],
+#     "covariances": []
+# }
+
+# test_series = {
+#     "target": [],
+#     "covariances": []
+# }
+
+# total_series = {
+#     "target": [],
+#     "covariances": []
+# }
+
+# transformers = [
+#     Scaler(StandardScaler()), Scaler(StandardScaler()), 
+#     Scaler(StandardScaler()), Scaler(StandardScaler()),
+#     Scaler(StandardScaler()), Scaler(StandardScaler())
+#     ]
+
+
+
+
+# for i, series in enumerate(series_multi):
+#     train, val = series.split_before(1000) # train / val split 
+#     val, test = val.split_before(1158) # val / test split
+
+#     train = transformers[i].fit_transform(train) # fit on train
+#     train_cov = train[["Adj Close", "High", "Low", "Open"]]
+
+#     val = transformers[i].transform(val)
+#     val_cov = val[["Adj Close", "High", "Low", "Open"]]
+
+#     test = transformers[i].transform(test)
+#     test_cov = test[["Adj Close", "High", "Low", "Open"]]
+
+#     total = transformers[i].transform(series)
+#     total_cov = total[["Adj Close", "High", "Low", "Open"]]
+
+#     train_series["target"].append(train["Close"])
+#     train_series["covariances"].append(train_cov)
+
+#     val_series["target"].append(val["Close"])
+#     val_series["covariances"].append(val_cov)
+
+#     test_series["target"].append(test["Close"])
+#     test_series["covariances"].append(test_cov)
+
+#     total_series["target"].append(total["Close"])
+#     total_series["covariances"].append(total_cov)
