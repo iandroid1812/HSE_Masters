@@ -2,7 +2,7 @@
 Datasets/kaggle/Tweet.csv
 Datasets/kaggle/Company_Tweet.csv
 Datasets/kaggle/Company.csv
-Datasets/results/clean_tweets.pkl
-Datasets/results/preprocessed.pkl
-Datasets/results/similarities.pkl
+Datasets/results/
+topics/
 darts_logs
+sentences.txt
