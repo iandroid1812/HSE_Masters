@@ -1,2 +1,0 @@
-id,project_name,experiment_description,epoch,start_time,duration(s),power_consumption(kWh),CO2_emissions(kg),CPU_name,GPU_name,OS,region/country,cost
-d971ba04-9ca6-4e7a-86ab-f717e53a027a,hse_masters,training the <your model> model,N/A,2022-11-15 01:50:21,249.75741171836853,0.0029869168173476124,0.0014838405365219466,"AMD Ryzen 7 2700 Eight-Core Processor/1 device(s), TDP:65.0",NVIDIA GeForce RTX 3080 Ti 1 device(s),Windows,UZ/Tashkent,nan
