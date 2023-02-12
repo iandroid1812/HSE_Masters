@@ -63,16 +63,17 @@ def historical_predictions(model, target, INPUT_CHUNK, OUTPUT_CHUNK, RETRAIN, LA
         hist = pd.read_pickle(prefix + f"Project_Files/Preprocessed_Files/historical/{model_name}_0.pkl")
         hist = TimeSeries.from_dataframe(hist)
     except:
+    
         hist = model.historical_forecasts(
             series=target,
             past_covariates=past,
             future_covariates=future,
-            train_length=INPUT_CHUNK+OUTPUT_CHUNK,
+            train_length=INPUT_CHUNK + OUTPUT_CHUNK,
             forecast_horizon=OUTPUT_CHUNK,
             stride=OUTPUT_CHUNK,
             retrain=RETRAIN,
             last_points_only=LAST,
-            verbose=True,
+            verbose=True
         )
         
         for i in range(len(hist)):
@@ -80,6 +81,9 @@ def historical_predictions(model, target, INPUT_CHUNK, OUTPUT_CHUNK, RETRAIN, LA
             company = company.pd_dataframe()
             if save:
                 company.to_pickle(prefix + f"Project_Files/Preprocessed_Files/historical/{model_name}_{i}.pkl")
+
+        # company = concatenate(hist)
+        # company.to_pickle(prefix + f"Project_Files/Preprocessed_Files/historical/{model_name}_{0}.pkl")
 
     return TimeSeries.from_dataframe(pd.read_pickle(prefix + f"Project_Files/Preprocessed_Files/historical/{model_name}_0.pkl"))
 
@@ -134,6 +138,8 @@ def model_compare(scaler, target, names, idx, range):
     
     for name in names:
         hist = pd.read_pickle(prefix + f"Project_Files/Preprocessed_Files/historical/{name}_{idx}.pkl")
+        if name == 'model_TFT_HRLOVE':
+            hist = hist.pd_dataframe()
         hist = TimeSeries.from_dataframe(hist)
 
         name = name.split('_')

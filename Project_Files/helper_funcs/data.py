@@ -1,5 +1,5 @@
 import pandas as pd
-import yfinance as yf
+# import yfinance as yf
 from os.path import exists
 
 

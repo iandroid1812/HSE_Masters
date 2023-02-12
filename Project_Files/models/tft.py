@@ -206,19 +206,15 @@ def tft_set(name, INPUT_CHUNK, OUTPUT_CHUNK, RANDOM, \
             input_chunk_length=INPUT_CHUNK,
             output_chunk_length=OUTPUT_CHUNK,
             hidden_size=64,
-            # hidden_size=8,
             lstm_layers=1,
             num_attention_heads=4,
             full_attention=True,
             feed_forward='SwiGLU',
             dropout=0.25,
-            # hidden_continuous_size=64,
-            # hidden_continuous_size=5,
-            hidden_continuous_size=64,
+            hidden_continuous_size=32,
             categorical_embedding_sizes=None,
             add_relative_index=False,
             loss_fn = DirectionalLossAll(),
-            # loss_fn = torch.nn.MSELoss(),
             likelihood=None,
             norm_type='RMSNorm',
 
@@ -232,7 +228,65 @@ def tft_set(name, INPUT_CHUNK, OUTPUT_CHUNK, RANDOM, \
                 'step_size': 20,
                 'gamma': 0.5
             },
-            batch_size=64,
+            batch_size=32,
+            n_epochs=epochs,
+            model_name=name,
+            log_tensorboard=True,
+            nr_epochs_val_period=1,
+            force_reset=True,
+            save_checkpoints=True,
+            random_state=RANDOM,
+            pl_trainer_kwargs={
+                "accelerator": "gpu", "devices": -1, "callbacks": callbacks
+            }
+        )
+
+        model_tft.fit(
+            series=target_train_scaled,
+            past_covariates=past_train_scaled,
+            future_covariates=future_train,
+            val_series=target_val_scaled,
+            val_past_covariates=past_val_scaled,
+            val_future_covariates=future_val,
+            verbose=True
+            )
+
+    return model_tft
+
+def tft_ret(name, INPUT_CHUNK, OUTPUT_CHUNK, RANDOM, \
+    callbacks=[], target_train_scaled=None, target_val_scaled=None, \
+        past_train_scaled=None, past_val_scaled=None, future_train=None, \
+            future_val=None, epochs=100):
+    try:
+        model_tft = TFTModel.load_from_checkpoint(name, best=True)
+    except:
+        model_tft = TFTModel(
+            input_chunk_length=INPUT_CHUNK,
+            output_chunk_length=OUTPUT_CHUNK,
+            hidden_size=64,
+            lstm_layers=1,
+            num_attention_heads=4,
+            full_attention=True,
+            # feed_forward='SwiGLU',
+            dropout=0.25,
+            hidden_continuous_size=32,
+            categorical_embedding_sizes=None,
+            add_relative_index=False,
+            loss_fn = nn.BCEWithLogitsLoss(),
+            # loss_fn = nn.BCELoss(),
+            likelihood=None,
+            norm_type='RMSNorm',
+            torch_metrics=torchmetrics.Accuracy(task="binary"),
+            optimizer_cls=torch.optim.Adam,
+            # optimizer_kwargs={
+            #     'lr': 3e-5
+            #     },
+            # lr_scheduler_cls=torch.optim.lr_scheduler.StepLR,
+            # lr_scheduler_kwargs={
+            #     'step_size': 20,
+            #     'gamma': 0.5
+            # },
+            batch_size=8,
             n_epochs=epochs,
             model_name=name,
             log_tensorboard=True,

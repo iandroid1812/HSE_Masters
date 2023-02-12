@@ -52,6 +52,7 @@ def market_init(freq='B', EXP_MA=15):
         df = df.set_index('Date').resample(freq).ffill().reset_index()
 
         df['Return'] = df['Close'].pct_change(1)
+        df['Return'] = np.where(df['Return'] >= 0, 1, 0)
 
         df['Volatility'] = ta.volatility.AverageTrueRange(
             high=df.High, low=df.Low, close=df.Close, window=EXP_MA).average_true_range()
@@ -131,7 +132,7 @@ def sentiment_init(freq='B', EXP_MA=15):
     return sentiment_df
 
 
-def embeddings_init(freq='B'):
+def embeddings_init(large, freq='B'):
     """Loads the embedding vector data for the tweets and calculates a mean vector 
     for each day of trading.
 
@@ -148,7 +149,14 @@ def embeddings_init(freq='B'):
 
     prefix = "../../"
 
-    with open(prefix + 'Project_Files/Preprocessed_Files/embeddings/embeddings_2.pkl', "rb") as file:
+    if large:
+        filename = "embeddings_large"
+        size = 768
+    else:
+        filename = "embeddings_2"
+        size = 384
+
+    with open(prefix + f'Project_Files/Preprocessed_Files/embeddings/{filename}.pkl', "rb") as file:
         embeddings = pickle.load(file)
         file.close()
     tickers_df = pd.read_csv(prefix + "Datasets/kaggle/Company_Tweet.csv")
@@ -174,7 +182,7 @@ def embeddings_init(freq='B'):
 
     for ticker in tickers:
         # first we add missing dates and fill thew with 0
-        company = df.xs(ticker).reindex(pd.date_range('2015-01-02', '2019-12-31'), fill_value=np.zeros(384))
+        company = df.xs(ticker).reindex(pd.date_range('2015-01-02', '2019-12-31'), fill_value=np.zeros(size))
 
         # then resample to business days and add up dropped past values up to the date that is not dropped
         company = company.resample(rule=freq, origin='end').mean()
@@ -195,7 +203,7 @@ def embeddings_init(freq='B'):
     return embeddings_df
 
 
-def total_init(EXP_MA):
+def total_init(EXP_MA, large):
     """Uses 3 functions above to initiate market, sentiment and embedding data to 
     merge them into one toatl dataframe.
 
@@ -213,23 +221,28 @@ def total_init(EXP_MA):
 
     prefix = "../../"
 
-    if exists(prefix + 'Project_Files/Preprocessed_Files/total/total_df.pkl'):
-        return pd.read_pickle(prefix + 'Project_Files/Preprocessed_Files/total/total_df.pkl')
+    if large:
+        filename = "total_df_large"
+    else:
+        filename = "total_df"
+
+    if exists(prefix + f'Project_Files/Preprocessed_Files/total/{filename}.pkl'):
+        return pd.read_pickle(prefix + f'Project_Files/Preprocessed_Files/total/{filename}.pkl')
 
     market = market_init(EXP_MA=EXP_MA)
     sentiment = sentiment_init(EXP_MA=EXP_MA)
-    embeddings = embeddings_init()
+    embeddings = embeddings_init(large)
 
     total = pd.merge(market, sentiment, on=['Date', 'Ticker'])
     total = pd.merge(total, embeddings, on=['Date', 'Ticker'])
     total= total.join(pd.DataFrame(total['embeddings'].to_list()))
 
-    total.to_pickle(prefix + 'Project_Files/Preprocessed_Files/total/total_df.pkl')
+    total.to_pickle(prefix + f'Project_Files/Preprocessed_Files/total/{filename}.pkl')
 
     return total
 
 
-def total_timeseries(EXP_MA, market=True, sentiment=True, embeddings=True):
+def total_timeseries(EXP_MA, market=True, sentiment=True, embeddings=True, large=False):
     """Converts pandas DataFrame into a sequence of TimeSeries objects for
     further model training.
 
@@ -250,6 +263,11 @@ def total_timeseries(EXP_MA, market=True, sentiment=True, embeddings=True):
         timeseries derived from dataframes for each required group of features
     """
 
+    if large:
+        size = 768
+    else:
+        size = 384
+
     market_columns = []
     if market is True:
         market_columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'Volatility', 'Return']
@@ -260,11 +278,11 @@ def total_timeseries(EXP_MA, market=True, sentiment=True, embeddings=True):
     
     embeddings_columns = []
     if embeddings is True:
-        embeddings_columns = np.arange(384).tolist()
+        embeddings_columns = np.arange(size).tolist()
 
     value_columns = market_columns + sentiment_columns + embeddings_columns
     
-    data = total_init(EXP_MA)
+    data = total_init(EXP_MA, large)
 
     timeseries_total = TimeSeries.from_group_dataframe(
         df=data,
@@ -303,7 +321,11 @@ def get_covariates(data, target, past_covariates, embeddings=False):
 
     train = data[0]
     val = data[1]
-    emb = np.arange(384).tolist()
+    if len(train[0].components) > 400:
+        emb = np.arange(768).tolist()
+    else:
+        emb = np.arange(384).tolist()
+    
     emb = list(map(str, emb))
 
     if embeddings:

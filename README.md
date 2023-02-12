@@ -9,7 +9,18 @@
 * [Notes](#notes)
 
 ## General info
-This project is ...
+
+**The carbon footprint left during experiments and GPU model training is  and calculated using [Eco2AI library](https://github.com/sb-ai-lab/Eco2AI)**
+
+In this work, we aim to test the hypothesis that semantic features and context are important in predicting financial market trends, and compare our approach to baseline sentiment-based solutions.
+
+In the conducted experiment, the correlation between sentiment score and price volatility in financial markets was analyzed. The study was conducted using dataset of historical market data during a 5 year period and sentiment scores obtained from Twitter social network. The sentiment scores were calculated based on the sentiments expressed in social media posts throughout the day.
+
+The results of the correlation analysis showed a strong positive relationship between sentiment score and price volatility. This indicates that as the sentiment score increases, the price volatility also increases, and vice versa. This relationship was found to be statistically significant.
+
+This study provides evidence that sentiment score and price volatility are highly correlated and can be used together to improve the performance of predictive models for financial markets. The results suggest that incorporating sentiment score as a feature in predictive models indeed leads to improved predictions of price movements and can provide valuable insights into the underlying market dynamics.
+
+The goal of this paper was to investigate whether sentence embeddings would yield better results in stock price prediction compared to sentiment analysis approach. The results of the experiments showed that the sentiment polarity extraction approach outperformed sentence embeddings in terms of accuracy and training time for predicting the stock closing price 3 and 5 days ahead. 
 
 ## Project structure
 
@@ -19,10 +30,9 @@ This project is ...
     - [Preprocessed_Files](Project_Files/Preprocessed_Files) files made by prediction and preprocessing functions saved for a later use in pickle format not to repeat calculations aall over again every time 
         + [sentence embeddings](Project_Files/Preprocessed_Files/embeddings)
         + [historical predictions](Project_Files/Preprocessed_Files/historical) of validation datasets
-        + [preprocessed files](Project_Files/Preprocessed_Files/preprocessing)
         + [sentiment score](Project_Files/Preprocessed_Files/sentiment) from multiple models
         + [BERTopic models](Project_Files/Preprocessed_Files/topics) for each company
-        + [total dataframes](Project_Files/Preprocessed_Files/total/total_df.pkl) combining all the data required for training
+        + [total dataframes](Project_Files/Preprocessed_Files/total) combining all the data required for training
         + [twitter files](Project_Files/Preprocessed_Files/tweets) for all companies
         + etc.
     - [TimeSeries_Prediction](Project_Files/TimeSeries_Prediction)

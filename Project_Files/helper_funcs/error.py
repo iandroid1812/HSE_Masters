@@ -1,4 +1,4 @@
-from darts.metrics import mape, mae, r2_score, rmse, smape
+from darts.metrics import mape, mae, r2_score, rmse, smape, mse
 import pandas as pd
 
 def error_count(true_inversed, pred_inversed, name):
@@ -48,12 +48,19 @@ def error_count(true_inversed, pred_inversed, name):
         intersect=True,
     )
 
+    error_mse = mse(
+        actual_series=true_inversed,
+        pred_series=pred_inversed,
+        intersect=True,
+    )
+
     df =  pd.DataFrame(
         {
             'MAPE': error_mape,
             'MAE': error_mae,
             'R2': error_r2,
             'RMSE': error_rmse,
+            'MSE': error_mse,
             'SMAPE': error_smape
         },
         index=[name]
