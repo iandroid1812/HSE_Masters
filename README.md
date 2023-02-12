@@ -10,7 +10,7 @@
 
 ## General info
 
-**The carbon footprint left during experiments and GPU model training is  and calculated using [Eco2AI library](https://github.com/sb-ai-lab/Eco2AI)**
+**The carbon footprint left during experiments and GPU model training is 4.06 kg and calculated using [Eco2AI library](https://github.com/sb-ai-lab/Eco2AI)**
 
 In this work, we aim to test the hypothesis that semantic features and context are important in predicting financial market trends, and compare our approach to baseline sentiment-based solutions.
 
